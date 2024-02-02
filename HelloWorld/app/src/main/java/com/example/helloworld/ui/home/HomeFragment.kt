@@ -28,10 +28,16 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val tankName: TextView = binding.tankName
+        homeViewModel.tankName.observe(viewLifecycleOwner) {
+            tankName.text = it
         }
+
+        val currentTemp: TextView = binding.currentTemp;
+        homeViewModel.currentTemp.observe(viewLifecycleOwner) {
+            tankName.text = if (it != null) String.format("%.1f\\u2103", it) else "---"
+        }
+
         return root
     }
 
