@@ -24,8 +24,7 @@
             android:layout_below="@id/tankName"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"/>
-
-        <com.github.mikephil.charting.charts.LineChart
+        <com.example.helloworld.ui.home.TimeVsTempChart
             android:id="@+id/temperatureChart"
             android:layout_width="match_parent"
             android:layout_height="200dp"

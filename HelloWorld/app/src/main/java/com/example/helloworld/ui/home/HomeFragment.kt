@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.helloworld.TankViewModel
+import com.example.helloworld.TimeTemperaturePair
 import com.example.helloworld.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -17,27 +19,35 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    val tankViewModel : TankViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(TankViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val tankViewModel =
+            ViewModelProvider(requireActivity()).get(TankViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val tankName: TextView = binding.tankName
-        homeViewModel.tankName.observe(viewLifecycleOwner) {
+        tankViewModel.tankName.observe(viewLifecycleOwner) {
             tankName.text = it
         }
 
-        val currentTemp: TextView = binding.currentTemp;
-        homeViewModel.currentTemp.observe(viewLifecycleOwner) {
-            tankName.text = if (it != null) String.format("%.1f\\u2103", it) else "---"
+        val currentTempView: TextView = binding.currentTemp
+        tankViewModel.currentTemp.observe(viewLifecycleOwner) { currentTemp : Double? ->
+            currentTempView.text = if (currentTemp != null) String.format("%.1f\u2103", currentTemp) else "---"
         }
 
+        val timeVsTempChart : TimeVsTempChart = binding.temperatureChart
+        tankViewModel.temperatureData.observe(viewLifecycleOwner) {
+                  timeVsTempChart.addEntries(it)
+        }
         return root
     }
 
